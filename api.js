@@ -11,7 +11,13 @@ const displayPhone = phones => {
     const phonesContainer = document.getElementById('phone-container');
     phonesContainer.innerText = '';
     // display 10 phones only 
-    phones = phones.slice(0, 10);
+    if (phones.length > 10) {
+        phones = phones.slice(0, 10);
+        const showMore = document.getElementById('show-more');
+        showMore.classList.remove('d-none');
+
+    }
+
     // display no phone found
     const noPhone = document.getElementById('no-phone-massage');
     if (phones.length === 0) {
