@@ -1,21 +1,25 @@
-const loadPhone = async (searchText) => {
+const loadPhone = async (searchText, dataLimit) => {
     const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`
 
     const res = await fetch(url);
     const data = await res.json();
-    displayPhone(data.data);
+    displayPhone(data.data, dataLimit);
 }
 
-const displayPhone = phones => {
+const displayPhone = (phones, dataLimit) => {
     // console.log(phones)
     const phonesContainer = document.getElementById('phone-container');
     phonesContainer.innerText = '';
     // display 10 phones only 
-    if (phones.length > 10) {
+    const showMore = document.getElementById('show-more');
+    if (dataLimit && phones.length > 10) {
         phones = phones.slice(0, 10);
-        const showMore = document.getElementById('show-more');
+
         showMore.classList.remove('d-none');
 
+    }
+    else {
+        showMore.classList.add('d-none');
     }
 
     // display no phone found
@@ -45,14 +49,17 @@ const displayPhone = phones => {
     // stop loader
     togglespinner(false);
 }
-
-document.getElementById('btn-search').addEventListener('click', function () {
-    // star loader
+const processSearch = (dataLimit) => {
     togglespinner(true);
     const searchField = document.getElementById('search-field');
     const searchText = searchField.value;
-    loadPhone(searchText);
+    loadPhone(searchText, dataLimit);
+}
 
+// handle shearch bottum 
+document.getElementById('btn-search').addEventListener('click', function () {
+    // star loader
+    processSearch(10);
 })
 const togglespinner = isloading => {
     const loaderSection = document.getElementById('loder');
@@ -64,5 +71,13 @@ const togglespinner = isloading => {
         loaderSection.classList.add('d-none')
     }
 
+
 }
+
+
+document.getElementById('btn-show-more').addEventListener('click', function () {
+    processSearch();
+
+
+})
 // loadPhone(); 
